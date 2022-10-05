@@ -1,9 +1,19 @@
 import Head from "next/head";
 import { Header } from "components/Header";
 import Image from "next/image";
-import { readFile } from "fs/promises";
+import { readFile, stat } from "fs/promises";
 
-const Comic = ({ img, title, alt, width, height }) => {
+const Comic = ({
+  img,
+  title,
+  alt,
+  width,
+  height,
+  nextId,
+  prevId,
+  hastNext,
+  hasPrevious,
+}) => {
   return (
     <>
       <Head>
@@ -19,6 +29,8 @@ const Comic = ({ img, title, alt, width, height }) => {
           <h1 className="font-bold">{title}</h1>
           <Image src={img} alt={alt} width={width} height={height} />
           <p>{alt}</p>
+
+          {/* Create pagination with nextId and prevId if available*/}
         </section>
       </main>
     </>
@@ -41,9 +53,27 @@ export async function getStaticProps({ params }) {
   const content = await readFile(`./comics/${id}.json`, "utf8");
   const comic = JSON.parse(content);
 
+  // Paginación
+  const idNumber = +id;
+  const prevId = idNumber - 1;
+  const nextId = idNumber + 1;
+
+  // Debería decir si existe un archivo o no
+  const { prevResult, nextResult } = await Promise.allSettled([
+    stat(`./comics/${prevId}.json`),
+    stat(`./comics/${nextId}.json`),
+  ]);
+
+  const hasPrevious = prevResult.status === "fulfilled";
+  const hastNext = nextResult.status === "fulfilled";
+
   return {
     props: {
       ...comic,
+      hasPrevious,
+      hastNext,
+      nextId,
+      prevId,
     },
   };
 }
