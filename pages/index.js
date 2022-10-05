@@ -1,8 +1,27 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import { Container, Card, Row, Text } from "@nextui-org/react";
+import { Header } from "../components/Header";
 
-export default function Home() {
+import fs from "fs/promises";
+import Link from "next/link";
+import Image from "next/image";
+
+// {
+//     id: 2587,
+//     img: 'https://imgs.xkcd.com/comics/for_the_sake_of_simplicity.png',
+//     height: 497,
+//     width: 322,
+//     month: '2',
+//     link: '',
+//     year: '2022',
+//     safe_title: 'For the Sake of Simplicity',
+//     alt: 'For the sake of simplicity, gardeners are assumed to move through Euclidean space--neglecting the distortion from general relativity--unless they are in the vicinity of a Schwarzschild Orchid.',
+//     title: 'For the Sake of Simplicity',
+//     day: '28'
+//   }
+
+export default function Home({ latestComics }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -11,59 +30,56 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <Header />
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+      <main>
+        <h2 className="text-3xl font-bold text-center mb-10">Latest comics</h2>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <section className="grid grid-cols-1 gap-2 max-w-md m-auto sm:grid-cols-2 md:grid-cols-3">
+          {latestComics.map((comic) => {
+            return (
+              <Link key={comic.id} href={`/comic/${comic.id}`}>
+                <a className="mb-4 pb-4 m-auto">
+                  <h3 className="font-bold text-sm text-center pb-2">
+                    {comic.title}
+                  </h3>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+                  <Image
+                    src={comic.img}
+                    alt={comic.alt}
+                    width={300}
+                    height={300}
+                    layout="intrinsic"
+                    objectFit="contain"
+                  />
+                </a>
+              </Link>
+            );
+          })}
+        </section>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
-  )
+  );
+}
+
+export async function getStaticProps(context) {
+  // Leer los archivos Json en comics
+  const files = await fs.readdir("./comics");
+  // Obtener los nombres de los archivos
+  const lastestComicsFiles = files.slice(-8, files.length);
+
+  // Leer el contenido de los archivos
+  const promisesReadFiles = lastestComicsFiles.map(async (file) => {
+    const content = await fs.readFile(`./comics/${file}`, "utf8");
+
+    return JSON.parse(content);
+  });
+
+  const latestComics = await Promise.all(promisesReadFiles);
+
+  return {
+    props: {
+      latestComics,
+    },
+  };
 }
