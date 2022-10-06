@@ -1,5 +1,5 @@
-import { Container, Text } from "@nextui-org/react";
-import Link from "next/link";
+import { Text } from '@nextui-org/react';
+import Link from 'next/link';
 
 export const Header = () => {
   return (
@@ -8,13 +8,17 @@ export const Header = () => {
         h1
         size={35}
         css={{
-          textGradient: "45deg, #000 -20%, #bbb 100%",
-          alignItems: "center",
+          textGradient: '45deg, #000 -20%, #bbb 100%',
+          alignItems: 'center',
         }}
         weight="bold"
       >
-        next
-        <span className="font-light">xkdc</span>
+        <Link href="/">
+          <a>
+            next
+            <span className="font-light">xkdc</span>
+          </a>
+        </Link>
       </Text>
 
       <nav>
