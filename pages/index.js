@@ -1,25 +1,11 @@
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import { Container, Card, Row, Text } from "@nextui-org/react";
-import { Header } from "../components/Header";
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import { Container, Card, Row, Text } from '@nextui-org/react';
+import { Header } from '../components/Header';
 
-import fs from "fs/promises";
-import Link from "next/link";
-import Image from "next/image";
-
-// {
-//     id: 2587,
-//     img: 'https://imgs.xkcd.com/comics/for_the_sake_of_simplicity.png',
-//     height: 497,
-//     width: 322,
-//     month: '2',
-//     link: '',
-//     year: '2022',
-//     safe_title: 'For the Sake of Simplicity',
-//     alt: 'For the sake of simplicity, gardeners are assumed to move through Euclidean space--neglecting the distortion from general relativity--unless they are in the vicinity of a Schwarzschild Orchid.',
-//     title: 'For the Sake of Simplicity',
-//     day: '28'
-//   }
+import fs from 'fs/promises';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home({ latestComics }) {
   return (
@@ -40,16 +26,9 @@ export default function Home({ latestComics }) {
             return (
               <Link key={comic.id} href={`/comic/${comic.id}`}>
                 <a className="mb-4 pb-4 m-auto">
-                  <h3 className="font-bold text-sm text-center pb-2">
-                    {comic.title}
-                  </h3>
+                  <h3 className="font-bold text-sm text-center pb-2">{comic.title}</h3>
 
-                  <Image
-                    src={comic.img}
-                    alt={comic.alt}
-                    width={comic.width}
-                    height={comic.height}
-                  />
+                  <Image src={comic.img} alt={comic.alt} width={comic.width} height={comic.height} />
                 </a>
               </Link>
             );
@@ -62,13 +41,13 @@ export default function Home({ latestComics }) {
 
 export async function getStaticProps(context) {
   // Leer los archivos Json en comics
-  const files = await fs.readdir("./comics");
+  const files = await fs.readdir('./comics');
   // Obtener los nombres de los archivos
   const lastestComicsFiles = files.slice(-8, files.length);
 
   // Leer el contenido de los archivos
   const promisesReadFiles = lastestComicsFiles.map(async (file) => {
-    const content = await fs.readFile(`./comics/${file}`, "utf8");
+    const content = await fs.readFile(`./comics/${file}`, 'utf8');
 
     return JSON.parse(content);
   });
