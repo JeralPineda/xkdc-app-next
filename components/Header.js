@@ -28,11 +28,7 @@ export const Header = () => {
               <a className="text-sm">Home</a>
             </Link>
           </li>
-          <li>
-            <Link href="/about">
-              <a className="text-sm">About</a>
-            </Link>
-          </li>
+
           <li>
             <Link href="/search">
               <a className="text-sm">Search</a>
