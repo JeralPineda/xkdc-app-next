@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import { Header } from 'components/Header';
-import Image from 'next/image';
-import { readFile, stat, readdir } from 'fs/promises';
 import Link from 'next/link';
+import Image from 'next/image';
 import { basename } from 'path';
+import { readFile, stat, readdir } from 'fs/promises';
+import { Layout } from 'components/Layout';
 
 const Comic = ({ img, title, alt, width, height, nextId, prevId, hasNext, hasPrevious }) => {
   return (
@@ -11,12 +11,9 @@ const Comic = ({ img, title, alt, width, height, nextId, prevId, hasNext, hasPre
       <Head>
         <title>xkdc - Comics for developers</title>
         <meta name="description" content="Comics for developers" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-
-      <main>
+      <Layout>
         <section className="max-w-lg m-auto">
           <h1 className="mb-4 text-xl font-bold text-center">{title}</h1>
           <div className="max-w-xs m-auto mb-4">
@@ -46,7 +43,7 @@ const Comic = ({ img, title, alt, width, height, nextId, prevId, hasNext, hasPre
             )}
           </div>
         </section>
-      </main>
+      </Layout>
     </>
   );
 };
