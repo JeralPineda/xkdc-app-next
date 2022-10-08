@@ -51,15 +51,21 @@ const Comic = ({ img, title, alt, width, height, nextId, prevId, hasNext, hasPre
 export default Comic;
 
 //Cuando se necesita un getStaticProps en una pagina dinamica [id] (comics/500)
-export async function getStaticPaths() {
+export async function getStaticPaths({ locales }) {
   // Leer el directorio
   const files = await readdir('./comics');
+  let paths = [];
 
-  // obtener el nombre del archivo (id)
-  const paths = files.map((file) => {
-    const id = basename(file, `.json`);
+  //* locales -> ['es', 'en']
+  locales.forEach((locale) => {
+    paths = paths.concat(
+      // obtener el nombre del archivo (id)
+      files.map((file) => {
+        const id = basename(file, `.json`);
 
-    return { params: { id } };
+        return { params: { id }, locale };
+      })
+    );
   });
 
   // obtener el nombre del archivo (id)
