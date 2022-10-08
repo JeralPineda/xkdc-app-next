@@ -22,7 +22,7 @@ export const Header = () => {
       });
   };
 
-  //   const restOfLocales = locales.filter((l) => l !== locale);
+  const restOfLocales = locales.filter((l) => l !== locale);
 
   return (
     <header className="flex justify-between items-center p-4 max-w-xl m-auto">
@@ -51,6 +51,15 @@ export const Header = () => {
             </Link>
           </li>
 
+          {/* Traducción */}
+          {/* Nunca tienes que crear url, hay que decirle a donde ir y en que idioma */}
+          <li>
+            <Link href="/" locale={restOfLocales[0]}>
+              <a className="text-sm font-semibold">{restOfLocales[0]}</a>
+            </Link>
+          </li>
+
+          {/* Search */}
           <li>
             <input className="px-4 py-1 text-xs border border-gray-400 rounded-3xl" ref={searchRef} type="search" placeholder="Search..." onChange={handleChange} />
             <div className="relative z-10">
