@@ -1,6 +1,9 @@
 import algoliasearch from 'algoliasearch';
 
-const client = algoliasearch('BRP6J1KQU4', '580ca1efe841ff1004b6d850bd236476');
+const APP_ID = process.env.APP_ID;
+const API_KEY = process.env.API_KEY;
+
+const client = algoliasearch(APP_ID, API_KEY);
 const index = client.initIndex('prod_comics');
 
 const CACHE = {};
